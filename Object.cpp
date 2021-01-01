@@ -45,9 +45,7 @@ void Object::SetScale(const glm::vec3 scale)
 
 void Object::Move(const glm::vec3 position)
 {
-	std::cout << this->position.x << " ";
 	this->position += position;
-	std::cout << this->position.x << std::endl;
 }
 
 void Object::Rotate(const glm::vec3 rotation)
