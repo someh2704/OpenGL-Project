@@ -93,7 +93,7 @@ void Object::InitVAO()
 
 void Object::UpdateModelMatrix()
 {
-	this->ModelMatrix = glm::mat4(0.0f);
+	this->ModelMatrix = glm::mat4(1.0f);
 	this->ModelMatrix = glm::translate(this->ModelMatrix, this->origin);
 	this->ModelMatrix = glm::rotate(this->ModelMatrix, glm::radians(this->rotation.x), glm::vec3(1.0f, 0.0f, 0.0f));
 	this->ModelMatrix = glm::rotate(this->ModelMatrix, glm::radians(this->rotation.y), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -102,11 +102,16 @@ void Object::UpdateModelMatrix()
 	this->ModelMatrix = glm::scale(this->ModelMatrix, this->scale);
 }
 
+glm::mat4 Object::getMatrix()
+{
+	this->UpdateModelMatrix();
+	return ModelMatrix;
+}
+
 void Object::render(Shader* shader)
 {
 	this->UpdateModelMatrix();
 	shader->Use();
-
 	// Bind VAO
 	glBindVertexArray(this->VAO);
 

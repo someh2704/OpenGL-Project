@@ -20,6 +20,7 @@ public:
 	void Rotate(const glm::vec3 rotation);
 	void ScaleUp(const glm::vec3 scale);
 	
+	glm::mat4 getMatrix();
 	void render(Shader* shader);
 private:
 	std::vector<Vertex> vertexArray;

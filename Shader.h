@@ -1,5 +1,7 @@
 #pragma once
 #include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -10,6 +12,8 @@ public:
 	~Shader();
 	void Use();
 	void UnUse();
+
+	void setMatrix4fv(glm::mat4 value, const GLchar* name, GLboolean transpose = GL_FALSE);
 private:
 	GLuint ProgramID;
 	const int versionMajor;

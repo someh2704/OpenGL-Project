@@ -39,6 +39,14 @@ void Shader::UnUse()
 	glUseProgram(0);
 }
 
+void Shader::setMatrix4fv(glm::mat4 value, const GLchar* name, GLboolean transpose)
+{
+	this->Use();
+	GLint MatrixID = glGetUniformLocation(this->ProgramID, name);
+	glUniformMatrix4fv(MatrixID, 1, transpose, glm::value_ptr(value));
+	this->UnUse();
+}
+
 std::string Shader::LoadShaderSource(const char* fileName)
 {
 	std::string src = "";
