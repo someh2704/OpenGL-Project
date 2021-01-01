@@ -1,0 +1,7 @@
+#version 330 core
+in vec3 PassColorAttribute;
+out vec4 fragmentColor;
+void main()
+{
+    fragmentColor = vec4(PassColorAttribute, 1.0);
+}
