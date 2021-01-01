@@ -13,7 +13,6 @@
 using std::cout;
 using std::endl;
 using std::vector;
-
 int framebufferWidth, framebufferHeight;
 
 void frameBufferResizeCallback(GLFWwindow* window, int width, int height) {
@@ -62,8 +61,7 @@ int main() {
 	cout << "Vendor: " << glGetString(GL_VENDOR) << endl;
 	cout << "Renderer: " << glGetString(GL_RENDERER) << endl;
 
-
-
+	// Cube Vertex and Color
 	vector<Vertex> vertex{
 		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.583f,  0.771f,  0.014f) },
 		Vertex{ glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.609f,  0.115f,  0.436f) },
@@ -102,22 +100,22 @@ int main() {
 		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.820f,  0.883f,  0.371f) },
 		Vertex{ glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.982f,  0.099f,  0.879f) },
 	};
-	
-	//vertex.push_back(Vertex{ glm::vec3(-1.0f, -1.0f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f) });
-	//vertex.push_back(Vertex{ glm::vec3(1.0f, -1.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f) });
-	//vertex.push_back(Vertex{ glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f) });
 
-
+	// Maybe Next time used
 	vector<GLuint> indices;
 
+	// Create Shader, Object and Camera 
 	Shader* shader = new Shader(3, 3, "VertexShader.vertexshader", "FragmentShader.fragmentshader");
 	Object object(vertex, indices);
 	Camera camera(glm::vec3(3, 3, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
+
+	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);
+
+
 	double lastTime = glfwGetTime();
 	int numOfFrames = 0;
-	int count = 0;
 
 	while (!glfwWindowShouldClose(window)) {
 
@@ -138,32 +136,23 @@ int main() {
 		glClearColor(0, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// Draw Line
 		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		//glm::mat4 MVP = camera.getProjection() * camera.getViewMatirx() * object.getMatrix();
-		
 
 		// Matrix
 		glm::mat4 ProjectionMatrix = camera.getProjection();
-
-		shader->Use();
-		shader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
-
 		glm::mat4 ViewMatrix = camera.getViewMatirx();
-
-		shader->setMatrix4fv(ViewMatrix, "ViewMatrix");
 		glm::mat4 ModelMatrix = object.getMatrix();
-		
-		// glm::mat4(1.0);
 
+		// Send Matrix to Shader
+		shader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
+		shader->setMatrix4fv(ViewMatrix, "ViewMatrix");
 		shader->setMatrix4fv(ModelMatrix, "ModelMatrix");
-
+		
 		// Draw Triangles
 		object.render(shader);
-		object.Rotate(glm::vec3(1.0f, 0.0f, 1.0f));
-		// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		object.Rotate(glm::vec3(2.0f, 0.0f, 2.0f));
 
-		count++;
+		// Swap Buffer
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}

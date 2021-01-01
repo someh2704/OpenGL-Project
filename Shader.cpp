@@ -102,10 +102,8 @@ void Shader::LinkProgram(GLuint vertexShader, GLuint geometryShader, GLuint Frag
 	this->ProgramID = glCreateProgram();
 
 	glAttachShader(this->ProgramID, vertexShader);
-
 	if (geometryShader)
 		glAttachShader(this->ProgramID, geometryShader);
-
 	glAttachShader(this->ProgramID, FragmentShader);
 
 	glLinkProgram(this->ProgramID);
