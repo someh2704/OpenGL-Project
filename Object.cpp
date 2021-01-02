@@ -102,6 +102,11 @@ void Object::UpdateModelMatrix()
 	this->ModelMatrix = glm::scale(this->ModelMatrix, this->scale);
 }
 
+void Object::UpdateUniforms(Shader* shader)
+{
+	shader->setMatrix4fv(this->ModelMatrix, "ModelMatrix");
+}
+
 glm::mat4 Object::getMatrix()
 {
 	this->UpdateModelMatrix();
@@ -111,15 +116,16 @@ glm::mat4 Object::getMatrix()
 void Object::render(Shader* shader)
 {
 	this->UpdateModelMatrix();
+	this->UpdateUniforms(shader);
 	shader->Use();
 	// Bind VAO
 	glBindVertexArray(this->VAO);
-
+	
 	if (this->indexArray.size() == 0)
 		glDrawArrays(GL_TRIANGLES, 0, this->vertexArray.size());
 	else
 		glDrawElements(GL_TRIANGLES, this->indexArray.size(), GL_UNSIGNED_INT, 0);
 
-	glBindVertexArray(0);
+	// glBindVertexArray(0);
 	glUseProgram(0);
 }

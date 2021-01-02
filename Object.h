@@ -39,4 +39,5 @@ private:
 
 	void InitVAO();
 	void UpdateModelMatrix();
+	void UpdateUniforms(Shader* shader);
 };

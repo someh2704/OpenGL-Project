@@ -14,7 +14,7 @@
 
 int main() {
 	Window window(1600, 900, "VertexShader.vertexshader", "FragmentShader.fragmentshader");
-
+	
 	// Cube Vertex and Color
 	std::vector<Vertex> vertex{
 		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.583f,  0.771f,  0.014f) },
@@ -67,9 +67,6 @@ int main() {
 	window.CreateObject(object2);
 	window.CreateObject(object3);
 
-	pprint(object1.getMatrix());
-	
-	// std::exit(EXIT_FAILURE);
 	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);
 

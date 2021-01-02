@@ -35,6 +35,7 @@ Window::Window(int width, int height, const char* vertexFilePath, const char* fr
 
 	this->initShader(vertexFilePath, fragmentFilePath);
 	this->initCamera();
+	glfwSetCursorPos(this->window, this->framebufferWidth / 2, this->framebufferHeight / 2);
 }
 
 Window::~Window()
@@ -114,6 +115,7 @@ void Window::Update()
 {
 	glfwGetCursorPos(this->window, &this->mouseX, &this->mouseY);
 	glfwSetCursorPos(this->window, this->framebufferWidth / 2, this->framebufferHeight / 2);
+	
 	if (glfwWindowShouldClose(this->window)) {
 		glUseProgram(0);
 		glBindVertexArray(0);
@@ -136,21 +138,32 @@ void Window::Update()
 	this->dt = static_cast<float>(this->currentTime) - static_cast<float>(this->lastTime);
 	this->camera->updateMouseInput(this->dt, offsetX, offsetY);
 
-	int i = 0;
-
 	for (int i = 0; i < this->objects.size(); i++) {
 		this->shader->Use();
 		glm::mat4 ProjectionMatrix = camera->getProjection();
 		glm::mat4 ViewMatrix = camera->getViewMatirx();
-		glm::mat4 ModelMatrix = this->objects[i].getMatrix();
 
 		shader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 		shader->setMatrix4fv(ViewMatrix, "ViewMatrix");
-		shader->setMatrix4fv(ModelMatrix, "ModelMatrix");
 
 		this->objects[i].render(shader);
-		this->objects[i].Rotate(glm::vec3(1.0f, 1.0f, 1.0));
-		glFlush();
+		switch (i)
+		{
+		case 0:
+			this->objects[i].Move(glm::vec3(0.01f, 0.0f, 0.0f));
+			this->objects[i].Rotate(glm::vec3(1.0f, 0.0f, 1.0));
+			break;
+		case 1:
+			this->objects[i].Move(glm::vec3(0.0f, 0.01f, 0.0f));
+			this->objects[i].Rotate(glm::vec3(-1.0f, 0.0f, -1.0));
+			break;
+		case 2:
+			this->objects[i].Move(glm::vec3(0.0f, 0.0f, 0.01f));
+			this->objects[i].Rotate(glm::vec3(0.0f, 1.0f, 0.0f));
+		default:
+			break;
+		}
+		
 	}
 
 	glfwSwapBuffers(window);
