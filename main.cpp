@@ -4,65 +4,19 @@
 #include "Shader.h"
 #include "Object.h"
 #include "Camera.h"
+#include "Window.h"
 #include <vector>
 
 #include <iostream>
 
 #include "Debug.h"
 
-using std::cout;
-using std::endl;
-using std::vector;
-int framebufferWidth, framebufferHeight;
-
-void frameBufferResizeCallback(GLFWwindow* window, int width, int height) {
-	glViewport(0, 0, width, height);
-}
 
 int main() {
-	// glfwInit
-	if (!glfwInit()) {
-		cout << "glfwInit Failed" << endl;
-		std::exit(EXIT_FAILURE);
-	}
-
-	// Window Setting
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_SAMPLES, 4);
-
-	// Create Window
-	GLFWwindow* window = glfwCreateWindow(1600, 900, "OpenGL Project", NULL, NULL);
-
-	if (!window) {
-		glfwTerminate();
-		std::exit(EXIT_FAILURE);
-	}
-
-	//Make Context
-	glfwMakeContextCurrent(window);
-
-	glfwSetFramebufferSizeCallback(window, frameBufferResizeCallback);
-
-	// glew Init
-	GLenum errorCode = glewInit();
-	if (errorCode != GLEW_OK) {
-		cout << "Failed to glewInit" << glewGetErrorString(errorCode) << endl;
-
-		glfwTerminate();
-		std::exit(EXIT_FAILURE);
-	}
-
-	// Machine Version
-	cout << "OpenGL version: " << glGetString(GL_VERSION) << endl;
-	cout << "GLSL version: " << glGetString(GL_SHADING_LANGUAGE_VERSION) << endl;
-	cout << "Vendor: " << glGetString(GL_VENDOR) << endl;
-	cout << "Renderer: " << glGetString(GL_RENDERER) << endl;
+	Window window(1600, 900, "VertexShader.vertexshader", "FragmentShader.fragmentshader");
 
 	// Cube Vertex and Color
-	vector<Vertex> vertex{
+	std::vector<Vertex> vertex{
 		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(0.583f,  0.771f,  0.014f) },
 		Vertex{ glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(0.609f,  0.115f,  0.436f) },
 		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.327f,  0.483f,  0.844f) },
@@ -102,66 +56,17 @@ int main() {
 	};
 
 	// Maybe Next time used
-	vector<GLuint> indices;
+	std::vector<GLuint> indices;
 
 	// Create Shader, Object and Camera 
-	Shader* shader = new Shader(3, 3, "VertexShader.vertexshader", "FragmentShader.fragmentshader");
 	Object object(vertex, indices);
-	Camera camera(glm::vec3(3, 3, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-
+	window.CreateObject(object);
 
 	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);
 
-
-	double lastTime = glfwGetTime();
-	int numOfFrames = 0;
-
-	while (!glfwWindowShouldClose(window)) {
-
-		// Check FPS
-		double currentTime = glfwGetTime();
-		numOfFrames++;
-		if (currentTime - lastTime >= 1.0) {
-
-			printf("%f ms/frame  %d fps \n", 1000.0 / double(numOfFrames), numOfFrames);
-			numOfFrames = 0;
-			lastTime = currentTime;
-		}
-
-		// Z-Buffer
-		glEnable(GL_DEPTH_TEST);
-
-		// Clear Window
-		glClearColor(0, 0, 0, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-		// Matrix
-		glm::mat4 ProjectionMatrix = camera.getProjection();
-		glm::mat4 ViewMatrix = camera.getViewMatirx();
-		glm::mat4 ModelMatrix = object.getMatrix();
-
-		// Send Matrix to Shader
-		shader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
-		shader->setMatrix4fv(ViewMatrix, "ViewMatrix");
-		shader->setMatrix4fv(ModelMatrix, "ModelMatrix");
-		
-		// Draw Triangles
-		object.render(shader);
-		object.Rotate(glm::vec3(2.0f, 0.0f, 2.0f));
-
-		// Swap Buffer
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+	while (1)
+	{
+		window.Update();
 	}
-
-	// Delete System
-	glUseProgram(0);
-	glBindVertexArray(0);
-
-	glfwTerminate();
-
-	std::exit(EXIT_SUCCESS);
 }
