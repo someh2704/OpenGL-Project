@@ -59,9 +59,17 @@ int main() {
 	std::vector<GLuint> indices;
 
 	// Create Shader, Object and Camera 
-	Object object(vertex, indices);
-	window.CreateObject(object);
+	Object object1(vertex, indices);
+	Object object2(vertex, indices);
+	Object object3(vertex, indices);
+	
+	window.CreateObject(object1);
+	window.CreateObject(object2);
+	window.CreateObject(object3);
 
+	pprint(object1.getMatrix());
+	
+	// std::exit(EXIT_FAILURE);
 	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);
 
