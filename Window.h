@@ -13,11 +13,12 @@
 #include "Camera.h"
 #include "Object.h"
 #include "Shader.h"
+#include "Light.h"
 
 
 class Window {
 public:
-	Window(int width, int height, const char* vertexFilePath, const char* fragmentFilePath);
+	Window(int width, int height);
 	~Window();
 	void Update();
 	void CreateObject(Object& object);
@@ -25,17 +26,20 @@ public:
 	void UpdateMouse();
 private:
 	void initWindow(int width, int height);
-	void initShader(const char* vertexFilePath, const char* fragmentFilePath);
+	void initShader();
 	void initCamera(glm::vec3 pos = glm::vec3(3,3,10), glm::vec3 view = glm::vec3(0, 0, 0), glm::vec3 up = glm::vec3(0, 1, 0));
+	void initLight();
 	void pprintFPS();
 
 
 
 	int framebufferWidth, framebufferHeight;
 	GLFWwindow* window;
-	Shader* shader;
+	Shader* objectShader;
+	Shader* lightShader;
 	std::vector<Object> objects;
 	Camera* camera;
+	Light* light;
 
 	double mouseX;
 	double mouseY;

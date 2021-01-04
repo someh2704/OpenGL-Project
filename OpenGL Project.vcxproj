@@ -151,12 +151,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="FragmentShader.fragmentshader" />
-    <None Include="VertexShader.vertexshader" />
+    <None Include="Object.fragmentshader" />
+    <None Include="Object.vertexshader" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="main.cpp" />
@@ -165,6 +166,7 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Debug.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Vertex.h" />

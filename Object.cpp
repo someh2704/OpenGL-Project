@@ -1,6 +1,7 @@
 #include "Object.h"
 
-Object::Object(std::vector<Vertex> vertexArray, std::vector<GLuint> indexArray, glm::vec3 position, glm::vec3 origin, glm::vec3 rotation, glm::vec3 scale) {
+Object::Object(std::vector<Vertex> vertexArray, std::vector<GLuint> indexArray,
+	glm::vec3 position, glm::vec3 origin, glm::vec3 rotation, glm::vec3 scale) {
 	this->position = position;
 	this->origin = origin;
 	this->rotation = rotation;
@@ -83,9 +84,9 @@ void Object::InitVAO()
 	// Color
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, color));
 	glEnableVertexAttribArray(1);
-	// Normal will use later with Material
-	// glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
-	// glEnableVertexAttribArray(2);
+	// Normal
+	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
+	glEnableVertexAttribArray(2);
 
 	// Bind VAO 0
 	glBindVertexArray(0);
@@ -105,6 +106,26 @@ void Object::UpdateModelMatrix()
 void Object::UpdateUniforms(Shader* shader)
 {
 	shader->setMatrix4fv(this->ModelMatrix, "ModelMatrix");
+}
+
+glm::vec3 Object::getOrigin()
+{
+	return this->origin;
+}
+
+glm::vec3 Object::getPosition()
+{
+	return this->position;
+}
+
+glm::vec3 Object::getRotation()
+{
+	return this->rotation;
+}
+
+glm::vec3 Object::getScale()
+{
+	return this->scale;
 }
 
 glm::mat4 Object::getMatrix()

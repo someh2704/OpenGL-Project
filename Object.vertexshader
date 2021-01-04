@@ -1,7 +1,11 @@
 #version 330 core
 layout(location = 0) in vec3 PositionAttribute;
 layout(location = 1) in vec3 ColorAttribute;
-out vec3 PassColorAttribute;
+layout(location = 2) in vec3 NormalAttribute;
+
+out vec3 oj_pos;
+out vec3 oj_color;
+out vec3 oj_normal;
 
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
@@ -10,5 +14,8 @@ uniform mat4 ProjectionMatrix;
 void main()
 {
     gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(PositionAttribute, 1.0);
-    PassColorAttribute = ColorAttribute;
+
+    oj_pos = PositionAttribute;
+    oj_color = ColorAttribute;
+    oj_normal = NormalAttribute;
 }

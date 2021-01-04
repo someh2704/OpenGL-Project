@@ -13,6 +13,9 @@ public:
 	void Use();
 	void UnUse();
 
+	void set1f(GLfloat value, const GLchar* name);
+	void setVec3(glm::vec3 value, const GLchar* name);
+	void setVec4(glm::vec4 value, const GLchar* name);
 	void setMatrix4fv(glm::mat4 value, const GLchar* name, GLboolean transpose = GL_FALSE);
 private:
 	GLuint ProgramID;

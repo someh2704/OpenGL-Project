@@ -1,0 +1,62 @@
+#version 330 core
+
+in vec3 oj_pos;
+in vec3 oj_color;
+in vec3 oj_normal;
+
+out vec4 fragmentColor;
+
+struct Light {
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+struct Element {
+    vec3 position;
+    vec3 color;
+    float intensity;
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+uniform Light light;
+uniform Element element;
+uniform vec3 cameraPosition;
+
+vec3 getAmbient(Light light) {
+    return light.ambient;
+}
+
+vec3 getDiffuse(Light light, vec3 oj_pos, vec3 oj_normal, vec3 lightPos) {
+    vec3 direction = normalize(lightPos - oj_pos);
+    vec3 diffuse = light.diffuse * clamp(dot(direction, normalize(oj_normal)), 0, 1);
+    
+    return diffuse;
+}
+
+vec3 getSpecular(Light light, vec3 oj_pos, vec3 oj_normal, vec3 CameraPosition, Element element) {
+    vec3 direction = normalize(oj_pos - element.position);
+    vec3 reflects = normalize(reflect(direction, normalize(oj_normal)));
+    vec3 view = normalize(cameraPosition - oj_pos);
+    vec3 specular = light.specular * pow(max(dot(view, reflects), 0), 35);
+
+    return specular;
+}
+
+void main()
+{
+    vec3 lightAmbient = getAmbient(light);
+    vec3 lightDiffuse = getDiffuse(light, oj_pos, oj_normal, element.position);
+    vec3 lightSpecular = getSpecular(light, oj_pos, oj_normal, cameraPosition, element);
+
+    float distance = length(element.position - oj_pos);
+    float attenuation = element.constant / (1.0f + element.linear * distance + element.quadratic * (distance * distance));
+
+    lightAmbient *= attenuation;
+    lightDiffuse *= attenuation;
+    lightSpecular *= attenuation;
+
+    fragmentColor = vec4(oj_color, 1.0f) * vec4(lightAmbient, 1.f) + vec4(lightDiffuse, 1.f) + vec4(lightSpecular, 1.f);
+}

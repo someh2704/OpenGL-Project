@@ -10,6 +10,7 @@ public:
 
 	glm::mat4 getProjection();
 	glm::mat4 getViewMatirx();
+	glm::vec3 getPosition();
 
 	void move(const float& dt, const int direction);
 	void updateMouseInput(const float& dt, const double& offsetX, const double& offsetY);

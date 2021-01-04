@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "Debug.h"
 enum direction { FORWARD = 0, BACKWARD, LEFT, RIGHT };
-Window::Window(int width, int height, const char* vertexFilePath, const char* fragmentFilePath)
+Window::Window(int width, int height)
 {
 	// glfwInit
 	if (!glfwInit()) {
@@ -33,16 +33,19 @@ Window::Window(int width, int height, const char* vertexFilePath, const char* fr
 	std::cout << "Vendor: " << glGetString(GL_VENDOR) << std::endl;
 	std::cout << "Renderer: " << glGetString(GL_RENDERER) << std::endl;
 
-	this->initShader(vertexFilePath, fragmentFilePath);
+	this->initShader();
 	this->initCamera();
+	this->initLight();
 	glfwSetCursorPos(this->window, this->framebufferWidth / 2, this->framebufferHeight / 2);
 }
 
 Window::~Window()
 {
 	delete[] window;
-	delete[] shader;
+	delete[] objectShader;
+	delete[] lightShader;
 	delete[] camera;
+	delete[] light;
 }
 
 void Window::CreateObject(Object& object)
@@ -91,14 +94,20 @@ void Window::initWindow(int width, int height)
 	glfwMakeContextCurrent(this->window);
 }
 
-void Window::initShader(const char* vertexFilePath, const char* fragmentFilePath)
+void Window::initShader()
 {
-	shader = new Shader(3, 3, vertexFilePath, fragmentFilePath);
+	this->objectShader = new Shader(3, 3, "Object.vertexshader", "Object.fragmentshader");
+	// this->lightShader = new Shader(3, 3, "Light.vertexshader", "Light.fragmentshader");
 }
 
 void Window::initCamera(glm::vec3 pos, glm::vec3 view, glm::vec3 up)
 {
 	camera = new Camera(pos, view, up);
+}
+
+void Window::initLight()
+{
+	this->light = new Light(glm::vec3(10.0f), glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(1.0f));
 }
 
 void Window::pprintFPS()
@@ -138,32 +147,21 @@ void Window::Update()
 	this->dt = static_cast<float>(this->currentTime) - static_cast<float>(this->lastTime);
 	this->camera->updateMouseInput(this->dt, offsetX, offsetY);
 
-	for (int i = 0; i < this->objects.size(); i++) {
-		this->shader->Use();
+	this->light->setPosition(this->camera->getPosition());
+
+	for (auto& object: this->objects) {
+		this->objectShader->Use();
 		glm::mat4 ProjectionMatrix = camera->getProjection();
 		glm::mat4 ViewMatrix = camera->getViewMatirx();
+		glm::vec3 cameraPosition = camera->getPosition();
 
-		shader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
-		shader->setMatrix4fv(ViewMatrix, "ViewMatrix");
+		this->objectShader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
+		this->objectShader->setMatrix4fv(ViewMatrix, "ViewMatrix");
+		this->objectShader->setVec3(cameraPosition, "cameraPosition");
+		this->light->sendToShader(this->objectShader);
 
-		this->objects[i].render(shader);
-		switch (i)
-		{
-		case 0:
-			this->objects[i].Move(glm::vec3(0.01f, 0.0f, 0.0f));
-			this->objects[i].Rotate(glm::vec3(1.0f, 0.0f, 1.0));
-			break;
-		case 1:
-			this->objects[i].Move(glm::vec3(0.0f, 0.01f, 0.0f));
-			this->objects[i].Rotate(glm::vec3(-1.0f, 0.0f, -1.0));
-			break;
-		case 2:
-			this->objects[i].Move(glm::vec3(0.0f, 0.0f, 0.01f));
-			this->objects[i].Rotate(glm::vec3(0.0f, 1.0f, 0.0f));
-		default:
-			break;
-		}
-		
+
+		object.render(objectShader);
 	}
 
 	glfwSwapBuffers(window);

@@ -8,7 +8,8 @@
 
 class Object {
 public:
-	Object(std::vector<Vertex> vertexAray, std::vector<GLuint> indexArray, glm::vec3 position = glm::vec3(0.0f), glm::vec3 origin = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f));
+	Object(std::vector<Vertex> vertexAray, std::vector<GLuint> indexArray,
+		glm::vec3 position = glm::vec3(0.0f), glm::vec3 origin = glm::vec3(0.0f), glm::vec3 rotation = glm::vec3(0.0f), glm::vec3 scale = glm::vec3(1.0f));
 	~Object();
 
 	void SetPosition(const glm::vec3 position);
@@ -20,6 +21,12 @@ public:
 	void Rotate(const glm::vec3 rotation);
 	void ScaleUp(const glm::vec3 scale);
 	
+	glm::vec3 getOrigin();
+	glm::vec3 getPosition();
+	glm::vec3 getRotation();
+	glm::vec3 getScale();
+
+
 	glm::mat4 getMatrix();
 	void render(Shader* shader);
 private:
@@ -37,6 +44,7 @@ private:
 
 	glm::mat4 ModelMatrix;
 
+	
 	void InitVAO();
 	void UpdateModelMatrix();
 	void UpdateUniforms(Shader* shader);

@@ -39,11 +39,29 @@ void Shader::UnUse()
 	glUseProgram(0);
 }
 
+void Shader::set1f(GLfloat value, const GLchar* name)
+{
+	this->Use();
+	glUniform1f(glGetUniformLocation(this->ProgramID, name), value);
+}
+
+void Shader::setVec3(glm::vec3 value, const GLchar* name)
+{
+	this->Use();
+	glUniform3fv(glGetUniformLocation(this->ProgramID, name), 1, glm::value_ptr(value));
+}
+
+void Shader::setVec4(glm::vec4 value, const GLchar* name)
+{
+	this->Use();
+	glUniform3fv(glGetUniformLocation(this->ProgramID, name), 1, glm::value_ptr(value));
+	this->UnUse();
+}
+
 void Shader::setMatrix4fv(glm::mat4 value, const GLchar* name, GLboolean transpose)
 {
 	this->Use();
-	GLint MatrixID = glGetUniformLocation(this->ProgramID, name);
-	glUniformMatrix4fv(MatrixID, 1, transpose, glm::value_ptr(value));
+	glUniformMatrix4fv(glGetUniformLocation(this->ProgramID, name), 1, transpose, glm::value_ptr(value));
 	this->UnUse();
 }
 

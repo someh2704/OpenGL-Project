@@ -23,7 +23,7 @@ Camera::Camera(glm::vec3 position, glm::vec3 direction, glm::vec3 worldUp)
 	this->width = 4.0f;
 	this->height = 3.0f;
 	this->nearClip = 0.1f;
-	this->farClip = 100.0f;
+	this->farClip = 1000.0f;
 }
 
 glm::mat4 Camera::getProjection()
@@ -42,6 +42,11 @@ glm::mat4 Camera::getViewMatirx()
 	);
 
 	return this->viewMatirx;
+}
+
+glm::vec3 Camera::getPosition()
+{
+	return this->position;
 }
 
 void Camera::updateCameraVector()
