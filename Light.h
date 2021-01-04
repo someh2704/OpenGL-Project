@@ -7,8 +7,8 @@
 
 class Light {
 public:
-	Light(glm::vec3 position,  glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 color = glm::vec3(1.0f), GLfloat intensity = 1.0f,
-		GLfloat constant = 1.0f, GLfloat linear = 0.045f, GLfloat quadratic = 0.0075f);
+	Light(glm::vec3 position,  glm::vec3 ambient, glm::vec3 diffuse, glm::vec3 specular, glm::vec3 color = glm::vec3(1.0f), GLfloat intensity = 100.0f,
+		GLfloat constant = 1.0f, GLfloat linear = 0.01f, GLfloat quadratic = 0.001f);
 
 	void setPosition(const glm::vec3 position);
 	void sendToShader(Shader* shader);

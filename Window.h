@@ -23,7 +23,6 @@ public:
 	void Update();
 	void CreateObject(Object& object);
 	void UpdateKeyboard();
-	void UpdateMouse();
 private:
 	void initWindow(int width, int height);
 	void initShader();

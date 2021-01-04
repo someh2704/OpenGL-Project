@@ -153,6 +153,7 @@
   <ItemGroup>
     <None Include="Object.fragmentshader" />
     <None Include="Object.vertexshader" />
+    <None Include="Tree2.obj.glb" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />

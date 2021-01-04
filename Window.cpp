@@ -107,7 +107,7 @@ void Window::initCamera(glm::vec3 pos, glm::vec3 view, glm::vec3 up)
 
 void Window::initLight()
 {
-	this->light = new Light(glm::vec3(10.0f), glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(1.0f));
+	this->light = new Light(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(1.0f));
 }
 
 void Window::pprintFPS()
@@ -146,7 +146,6 @@ void Window::Update()
 	float offsetY = this->mouseY - this->lastMouseY;
 	this->dt = static_cast<float>(this->currentTime) - static_cast<float>(this->lastTime);
 	this->camera->updateMouseInput(this->dt, offsetX, offsetY);
-
 	this->light->setPosition(this->camera->getPosition());
 
 	for (auto& object: this->objects) {

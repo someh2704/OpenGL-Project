@@ -11,6 +11,130 @@
 
 #include "Debug.h"
 
+std::vector<Vertex> loadOBJ(const char* file_name)
+{
+	//Vertex portions
+	std::vector<glm::fvec3> vertex_positions;
+	std::vector<glm::fvec2> vertex_texcoords;
+	std::vector<glm::fvec3> vertex_normals;
+
+	//Face vectors
+	std::vector<GLint> vertex_position_indicies;
+	std::vector<GLint> vertex_texcoord_indicies;
+	std::vector<GLint> vertex_normal_indicies;
+
+	//Vertex array
+	std::vector<Vertex> vertices;
+
+	std::stringstream ss;
+	std::ifstream in_file(file_name);
+	std::string line = "";
+	std::string prefix = "";
+	glm::vec3 temp_vec3;
+	glm::vec2 temp_vec2;
+	GLint temp_glint = 0;
+
+	//File open error check
+	if (!in_file.is_open())
+	{
+		throw "ERROR::OBJLOADER::Could not open file.";
+	}
+
+	//Read one line at a time
+	while (std::getline(in_file, line))
+	{
+		//Get the prefix of the line
+		ss.clear();
+		ss.str(line);
+		ss >> prefix;
+
+		if (prefix == "#")
+		{
+
+		}
+		else if (prefix == "o")
+		{
+
+		}
+		else if (prefix == "s")
+		{
+
+		}
+		else if (prefix == "use_mtl")
+		{
+
+		}
+		else if (prefix == "v") //Vertex position
+		{
+			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+			vertex_positions.push_back(temp_vec3);
+		}
+		else if (prefix == "vt")
+		{
+			ss >> temp_vec2.x >> temp_vec2.y;
+			vertex_texcoords.push_back(temp_vec2);
+		}
+		else if (prefix == "vn")
+		{
+			ss >> temp_vec3.x >> temp_vec3.y >> temp_vec3.z;
+			vertex_normals.push_back(temp_vec3);
+		}
+		else if (prefix == "f")
+		{
+			int counter = 0;
+			while (ss >> temp_glint)
+			{
+				//Pushing indices into correct arrays
+				if (counter == 0)
+					vertex_position_indicies.push_back(temp_glint);
+				else if (counter == 1)
+					vertex_texcoord_indicies.push_back(temp_glint);
+				else if (counter == 2)
+					vertex_normal_indicies.push_back(temp_glint);
+
+				//Handling characters
+				if (ss.peek() == '/')
+				{
+					++counter;
+					ss.ignore(1, '/');
+				}
+				else if (ss.peek() == ' ')
+				{
+					++counter;
+					ss.ignore(1, ' ');
+				}
+
+				//Reset the counter
+				if (counter > 2)
+					counter = 0;
+			}
+		}
+		else
+		{
+
+		}
+	}
+
+	//Build final vertex array (mesh)
+	vertices.resize(vertex_position_indicies.size(), Vertex());
+
+	float color = 1.0f / vertices.size();
+	//Load in all indices
+	for (size_t i = 0; i < vertices.size(); ++i)
+	{
+		vertices[i].position = vertex_positions[vertex_position_indicies[i] - 1];
+		vertices[i].color = glm::vec3(color * i, color * i, color * i);
+		vertices[i].normal = vertex_normals[vertex_normal_indicies[i] - 1];
+	}
+
+	//DEBUG
+	std::cout << "Nr of vertices: " << vertices.size() << "\n";
+
+	//Loaded success
+	std::cout << "OBJ file loaded!" << "\n";
+	return vertices;
+}
+
 
 int main() {
 	Window window(1600, 900);
@@ -75,26 +199,33 @@ int main() {
 	};
 	*/
 
+	std::vector<Vertex> object = loadOBJ("Tree.obj");
+	std::vector<Vertex> sphere = loadOBJ("Moon 2K.obj");
+
 	std::vector<GLuint> indices;
 
 	// Create Shader, Object and Camera 
-	Object object1(vertex, indices);
-	Object object2(vertex, indices);
-	Object object3(vertex, indices);
-	Object object4(vertex, indices);
-	Object object5(vertex, indices);
-
+	Object object1(object, indices);
+	Object object2(object, indices);
+	Object object3(object, indices);
+	Object object4(object, indices);
+	Object object5(object, indices);
+	Object object6(object, indices);
+	Object moon(sphere, indices);
 
 	object1.Move(glm::vec3(10.0f, 0.0f, 10));
-	object2.Move(glm::vec3(25.0f, 0.0f, 25.0f));
-	object3.Move(glm::vec3(40.0f, 0.0f, 40.0f));
-	object4.Move(glm::vec3(70.0f, 0.0f, 70.0f));
+	object2.Move(glm::vec3(14.0f, 0.0f, 13.0f));
+	object3.Move(glm::vec3(15.0f, 0.0f, 12.0f));
+	object4.Move(glm::vec3(11.0f, 0.0f, 11.0f));
+	object5.Move(glm::vec3(12.0f, 0.0f, 15.0f));
 	
 	window.CreateObject(object1);
 	window.CreateObject(object2);
 	window.CreateObject(object3);
 	window.CreateObject(object4);
-	// window.CreateObject(object5);
+	window.CreateObject(object5);
+	window.CreateObject(object6);
+	// window.CreateObject(moon);
 
 	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);

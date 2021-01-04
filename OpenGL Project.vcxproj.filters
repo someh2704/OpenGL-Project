@@ -21,6 +21,9 @@
     <None Include="Object.fragmentshader">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="Tree2.obj.glb">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Shader.cpp">
