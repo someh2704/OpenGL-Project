@@ -7,6 +7,7 @@ out vec3 oj_pos;
 out vec3 oj_color;
 out vec3 oj_normal;
 
+uniform mat4 depthMVP;
 uniform mat4 ModelMatrix;
 uniform mat4 ViewMatrix;
 uniform mat4 ProjectionMatrix;

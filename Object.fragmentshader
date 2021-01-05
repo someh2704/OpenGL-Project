@@ -4,6 +4,7 @@ in vec3 oj_pos;
 in vec3 oj_color;
 in vec3 oj_normal;
 
+layout(location=0) out float fragmentdepth;
 out vec4 fragmentColor;
 
 struct Light {
@@ -59,4 +60,5 @@ void main()
     lightSpecular *= attenuation;
 
     fragmentColor = vec4(oj_color, 1.0f) * vec4(lightAmbient, 1.f) + vec4(lightDiffuse, 1.f) + vec4(lightSpecular, 1.f);
+    // fragmentdepth = gl_FragCoord.z;
 }

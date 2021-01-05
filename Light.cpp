@@ -37,3 +37,21 @@ void Light::sendToShader(Shader* shader)
 	shader->set1f(this->linear, "element.linear");
 	shader->set1f(this->quadratic, "element.quadratic");
 }
+
+void Light::updateMatrix()
+{
+	this->lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 0.1f, 1000.0f);
+	this->lightView = glm::lookAt(
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0, 0, 0),
+		glm::vec3(0, 1, 0)
+	);
+	this->depthModelMatrix = glm::mat4(1.0f);
+	
+	this->depthMVP = lightProjection * lightView * depthModelMatrix;
+}
+
+void Light::updateUniform(Shader* shader)
+{
+	shader->setMatrix4fv(this->depthMVP, "depthMVP");
+}

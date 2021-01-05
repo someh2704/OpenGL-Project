@@ -118,12 +118,11 @@ std::vector<Vertex> loadOBJ(const char* file_name)
 	//Build final vertex array (mesh)
 	vertices.resize(vertex_position_indicies.size(), Vertex());
 
-	float color = 1.0f / vertices.size();
 	//Load in all indices
 	for (size_t i = 0; i < vertices.size(); ++i)
 	{
 		vertices[i].position = vertex_positions[vertex_position_indicies[i] - 1];
-		vertices[i].color = glm::vec3(color * i, color * i, color * i);
+		vertices[i].color = glm::vec3(0.0f, 0.5f, 0.0f);
 		vertices[i].normal = vertex_normals[vertex_normal_indicies[i] - 1];
 	}
 
@@ -178,6 +177,45 @@ int main() {
 		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(0.820f,  0.883f,  0.371f), glm::vec3(1.0f) },
 		Vertex{ glm::vec3( 1.0f, -1.0f,  1.0f), glm::vec3(0.982f,  0.099f,  0.879f), glm::vec3(1.0f) },
 	};
+
+	std::vector<Vertex> box{
+		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f, -1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f, -1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f, -1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f,  1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(-1.0f,  1.0f,  1.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+		Vertex{ glm::vec3(1.0f, -1.0f,  1.0f),  glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f) },
+	};
 	/*
 	std::vector<Vertex> vertex{
 		Vertex{glm::vec3(0.0f, 0.5f, 0.0f), glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(1.0f)},
@@ -199,33 +237,49 @@ int main() {
 	};
 	*/
 
-	std::vector<Vertex> object = loadOBJ("Tree.obj");
-	std::vector<Vertex> sphere = loadOBJ("Moon 2K.obj");
+	std::vector<Vertex> Sqare{
+		Vertex{glm::vec3(1.0f, -1.0f, 1.0f), glm::vec3(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
+		Vertex{glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
+		Vertex{glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
+		Vertex{glm::vec3(-1.0f, -1.0f, -1.0f), glm::vec3(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
+		Vertex{glm::vec3(-1.0f, -1.0f, 1.0f), glm::vec3(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)},
+		Vertex{glm::vec3(1.0f, -1.0f, -1.0f), glm::vec3(1.0f), glm::vec3(0.0f, 1.0f, 0.0f)}
+	};
 
 	std::vector<GLuint> indices;
 
 	// Create Shader, Object and Camera 
-	Object object1(object, indices);
-	Object object2(object, indices);
-	Object object3(object, indices);
-	Object object4(object, indices);
-	Object object5(object, indices);
-	Object object6(object, indices);
-	Object moon(sphere, indices);
+	// Object* Tree1 = new Object(loadOBJ("Tree.obj"), indices);
 
-	object1.Move(glm::vec3(10.0f, 0.0f, 10));
-	object2.Move(glm::vec3(14.0f, 0.0f, 13.0f));
-	object3.Move(glm::vec3(15.0f, 0.0f, 12.0f));
-	object4.Move(glm::vec3(11.0f, 0.0f, 11.0f));
-	object5.Move(glm::vec3(12.0f, 0.0f, 15.0f));
-	
-	window.CreateObject(object1);
-	window.CreateObject(object2);
-	window.CreateObject(object3);
-	window.CreateObject(object4);
-	window.CreateObject(object5);
-	window.CreateObject(object6);
-	// window.CreateObject(moon);
+	Object* object = new Object(loadOBJ("Moon 2K.obj"), indices);
+	object->Move(glm::vec3(10.0f, 10.0f, 10.0f));
+
+	Object* Sun = new Object(box, indices);
+	Sun->Move(glm::vec3(10.0f, 10.0f, 10.0f));
+
+	Object* tree1 = new Object(loadOBJ("Tree.obj"), indices);
+	Object* tree2 = new Object(loadOBJ("Tree.obj"), indices);
+	Object* tree3 = new Object(loadOBJ("Tree.obj"), indices);
+	Object* tree4 = new Object(loadOBJ("Tree.obj"), indices);
+	Object* tree5 = new Object(loadOBJ("Tree.obj"), indices);
+
+	Object* wall = new Object(Sqare, indices);
+	wall->ScaleUp(glm::vec3(100.0f, 0.0f, 100.0f));
+
+	tree1->Move(glm::vec3(2.0f, 0.0f, -2.0f));
+	tree2->Move(glm::vec3(-2.0f, 0.0f, -2.0f));
+	tree3->Move(glm::vec3(-2.0f, 0.0f, 2.0f));
+	tree4->Move(glm::vec3(2.0f, 0.0f, 2.0f));
+	tree5->Move(glm::vec3(4.0f, 0.0f, 4.0f));
+
+	// window.CreateObject(object);
+	window.CreateObject(tree1);
+	window.CreateObject(tree2);
+	window.CreateObject(tree3);
+	window.CreateObject(tree4);
+	window.CreateObject(tree5);
+	window.CreateObject(wall);
+	// window.CreateObject(Sun);
 
 	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);

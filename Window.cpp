@@ -36,6 +36,7 @@ Window::Window(int width, int height)
 	this->initShader();
 	this->initCamera();
 	this->initLight();
+	// this->initDepth();
 	glfwSetCursorPos(this->window, this->framebufferWidth / 2, this->framebufferHeight / 2);
 }
 
@@ -46,9 +47,13 @@ Window::~Window()
 	delete[] lightShader;
 	delete[] camera;
 	delete[] light;
+
+	for (auto& object : this->objects) {
+		delete object;
+	}
 }
 
-void Window::CreateObject(Object& object)
+void Window::CreateObject(Object* object)
 {
 	this->objects.push_back(object);
 }
@@ -107,7 +112,29 @@ void Window::initCamera(glm::vec3 pos, glm::vec3 view, glm::vec3 up)
 
 void Window::initLight()
 {
-	this->light = new Light(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.1f), glm::vec3(1.0f), glm::vec3(1.0f));
+	this->light = new Light(glm::vec3(1.0f, 0.0f, 0.0f), glm::vec3(0.2f, 0.2f, 0.2f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(1.0f, 1.0f, 1.0f));
+}
+
+void Window::initDepth()
+{
+	this->SHADOW_WIDTH = this->framebufferWidth;
+	this->SHADOW_HEIGHT = this->framebufferHeight;
+
+	glGenFramebuffers(1, &this->depthFBO);
+
+
+	glGenTextures(1, &this->depthMap);
+	glBindTexture(GL_TEXTURE_2D, depthMap);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT,
+		this->SHADOW_WIDTH, this->SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, this->depthMap, 0);
+
+	glDrawBuffer(GL_NONE);
 }
 
 void Window::pprintFPS()
@@ -141,13 +168,15 @@ void Window::Update()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glfwPollEvents();
+
 	this->UpdateKeyboard();
 	float offsetX = this->mouseX - this->lastMouseX;
 	float offsetY = this->mouseY - this->lastMouseY;
 	this->dt = static_cast<float>(this->currentTime) - static_cast<float>(this->lastTime);
 	this->camera->updateMouseInput(this->dt, offsetX, offsetY);
-	this->light->setPosition(this->camera->getPosition());
+	// this->light->setPosition(this->camera->getPosition());
 
+	this->light->updateMatrix();
 	for (auto& object: this->objects) {
 		this->objectShader->Use();
 		glm::mat4 ProjectionMatrix = camera->getProjection();
@@ -157,11 +186,13 @@ void Window::Update()
 		this->objectShader->setMatrix4fv(ProjectionMatrix, "ProjectionMatrix");
 		this->objectShader->setMatrix4fv(ViewMatrix, "ViewMatrix");
 		this->objectShader->setVec3(cameraPosition, "cameraPosition");
+		// this->light->updateUniform(this->objectShader);
 		this->light->sendToShader(this->objectShader);
 
 
-		object.render(objectShader);
-	}
+		object->render(objectShader);
+		this->objectShader->UnUse();
 
+	}
 	glfwSwapBuffers(window);
 }

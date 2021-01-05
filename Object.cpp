@@ -148,5 +148,5 @@ void Object::render(Shader* shader)
 		glDrawElements(GL_TRIANGLES, this->indexArray.size(), GL_UNSIGNED_INT, 0);
 
 	// glBindVertexArray(0);
-	glUseProgram(0);
+	// glUseProgram(0);
 }
