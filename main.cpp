@@ -248,14 +248,6 @@ int main() {
 
 	std::vector<GLuint> indices;
 
-	// Create Shader, Object and Camera 
-	// Object* Tree1 = new Object(loadOBJ("Tree.obj"), indices);
-
-	Object* object = new Object(loadOBJ("Moon 2K.obj"), indices);
-	object->Move(glm::vec3(10.0f, 10.0f, 10.0f));
-
-	Object* Sun = new Object(box, indices);
-	Sun->Move(glm::vec3(10.0f, 10.0f, 10.0f));
 
 	Object* tree1 = new Object(loadOBJ("Tree.obj"), indices);
 	Object* tree2 = new Object(loadOBJ("Tree.obj"), indices);
@@ -263,8 +255,8 @@ int main() {
 	Object* tree4 = new Object(loadOBJ("Tree.obj"), indices);
 	Object* tree5 = new Object(loadOBJ("Tree.obj"), indices);
 
-	Object* wall = new Object(Sqare, indices);
-	wall->ScaleUp(glm::vec3(100.0f, 0.0f, 100.0f));
+	Object* floor = new Object(Sqare, indices);
+	floor->ScaleUp(glm::vec3(100.0f, 0.0f, 100.0f));
 
 	tree1->Move(glm::vec3(2.0f, 0.0f, -2.0f));
 	tree2->Move(glm::vec3(-2.0f, 0.0f, -2.0f));
@@ -272,14 +264,12 @@ int main() {
 	tree4->Move(glm::vec3(2.0f, 0.0f, 2.0f));
 	tree5->Move(glm::vec3(4.0f, 0.0f, 4.0f));
 
-	// window.CreateObject(object);
 	window.CreateObject(tree1);
 	window.CreateObject(tree2);
 	window.CreateObject(tree3);
 	window.CreateObject(tree4);
 	window.CreateObject(tree5);
-	window.CreateObject(wall);
-	// window.CreateObject(Sun);
+	window.CreateObject(floor);
 
 	// equzlize the hertz of the frame and monitor
 	glfwSwapInterval(1);
