@@ -174,7 +174,7 @@ void Window::Update()
 	float offsetY = this->mouseY - this->lastMouseY;
 	this->dt = static_cast<float>(this->currentTime) - static_cast<float>(this->lastTime);
 	this->camera->updateMouseInput(this->dt, offsetX, offsetY);
-	// this->light->setPosition(this->camera->getPosition());
+	this->light->setPosition(this->camera->getPosition());
 
 	this->light->updateMatrix();
 	for (auto& object: this->objects) {
